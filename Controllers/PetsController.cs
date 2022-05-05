@@ -15,16 +15,87 @@ namespace pet_hotel.Controllers
     public class PetsController : ControllerBase
     {
         private readonly ApplicationContext _context;
-        public PetsController(ApplicationContext context) {
+        public PetsController(ApplicationContext context)
+        {
             _context = context;
         }
 
         // This is just a stub for GET / to prevent any weird frontend errors that 
         // occur when the route is missing in this controller
         [HttpGet]
-        public IEnumerable<Pet> GetPets() {
-            return new List<Pet>();
+        public IEnumerable<Pet> GetPets()
+        {
+            return _context.Pets;
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<Pet> GetById(int id)
+        {
+            Pet pet = _context.Pets
+            .SingleOrDefault(pet => pet.id == id);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+            return pet;
+        }
+
+        [HttpPost]
+        public Pet Create(Pet pet)
+        {
+            _context.Add(pet);
+            _context.SaveChanges();
+            return pet;
+        }
+
+        [HttpPut("{id}")]
+        public Pet Update(int id, Pet pet)
+        {
+            pet.id = id;
+            _context.Update(pet);
+            _context.SaveChanges();
+            return pet;
+        }
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            Pet pet = _context.Pets.Find(id);
+            _context.Pets.Remove(pet);
+            _context.SaveChanges();
+        }
+
+        [HttpPut("{id}/checkin")]
+
+        public Pet Put(int id)
+        {
+            var pet = _context.Pets.SingleOrDefault(pet => pet.id == id);
+
+            pet.checkedInAt = DateTime.Now;
+
+            _context.Update(pet);
+
+            _context.SaveChanges();
+
+            return pet;
+        }
+
+        [HttpPut("{id}/checkout")]
+
+        public Pet Update(int id)
+        {
+            var pet = _context.Pets.SingleOrDefault(pet => pet.id == id);
+
+            pet.checkedInAt = null;
+
+            _context.Update(pet);
+
+            _context.SaveChanges();
+
+            return pet;
+        }
+
+
+
 
         // [HttpGet]
         // [Route("test")]

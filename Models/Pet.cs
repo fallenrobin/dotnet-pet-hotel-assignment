@@ -32,16 +32,19 @@ namespace pet_hotel
 
         public string name { get; set; }
 
+        
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public PetBreedType breed { get; set; }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public PetColorType color { get; set; }
 
-        public DateTime checkedInAt { get; set; }
+        public DateTime? checkedInAt { get; set; }
 
         [ForeignKey("petOwner")]
         public int petOwner_id { get; set; }
-        
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+
+
         public PetOwner petOwner { get; set; }
 
 
